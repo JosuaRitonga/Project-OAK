@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Konversi Bilangan</title>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      // Fungsi copy hasil
+      function copyResult(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text);
+        alert("Hasil sudah disalin!");
+      }
+
+      // Fungsi konversi
+      function konversi() {
+        const input = document.getElementById("inputBil").value.trim();
+        const basis = document.getElementById("basisAsal").value;
+        const target = document.getElementById("basisTarget").value;
+        const langkahDiv = document.getElementById("langkah");
+        const hasilDiv = document.getElementById("hasil");
+
+        let desimal;
+        let langkah = "";
+
+        // Validasi input
+        if (input === "") {
+          hasilDiv.innerText = "Masukkan bilangan!";
+          langkahDiv.innerHTML = "";
+          return;
+        }
+
+        // Konversi ke desimal
+        try {
+          switch (basis) {
+            case "bin":
+              desimal = parseInt(input, 2);
+              langkah += `Konversi dari <b>biner</b> ke desimal:<br>${input}<sub>2</sub> = ${desimal}<sub>10</sub><br><br>`;
+              break;
+            case "oct":
+              desimal = parseInt(input, 8);
+              langkah += `Konversi dari <b>oktal</b> ke desimal:<br>${input}<sub>8</sub> = ${desimal}<sub>10</sub><br><br>`;
+              break;
+            case "dec":
+              desimal = parseInt(input, 10);
+              break;
+            case "hex":
+              desimal = parseInt(input, 16);
+              langkah += `Konversi dari <b>heksadesimal</b> ke desimal:<br>${input}<sub>16</sub> = ${desimal}<sub>10</sub><br><br>`;
+              break;
+          }
+          if (isNaN(desimal)) throw "error";
+        } catch {
+          hasilDiv.innerText = "Input tidak valid!";
+          langkahDiv.innerHTML = "";
+          return;
+        }
+
+        let hasil = "";
+        let langkahTarget = "";
+
+        // Khusus desimal negatif ke biner (compliment 2)
+        if (basis === "dec" && target === "bin" && desimal < 0) {
+          // Panjang bit: default 8 (bisa diubah jadi dinamis)
+          let n = 8;
+          let nilaiPositif = Math.abs(desimal);
+          let binerPositif = nilaiPositif
+            .toString(2)
+            .padStart(n, "0")
+            .slice(-n);
+          langkah += `1. Konversi nilai mutlak ke biner:\n${nilaiPositif}<sub>10</sub> = ${binerPositif}<sub>2</sub><br>`;
+          // Invers bit
+          let invers = binerPositif
+            .split("")
+            .map((b) => (b === "1" ? "0" : "1"))
+            .join("");
+          langkah += `2. Invers semua bit: ${binerPositif} → ${invers}<br>`;
+          // Tambah 1
+          let compl2 = (parseInt(invers, 2) + 1)
+            .toString(2)
+            .padStart(n, "0")
+            .slice(-n);
+          langkah += `3. Tambahkan 1: ${invers} + 1 = ${compl2}<br>`;
+          hasil = `Hasil: ${compl2}<sub>2</sub>`;
+        } else {
+          // Konversi desimal ke target lain
+          let hasilKonversi = "";
+          switch (target) {
+            case "bin":
+              hasilKonversi = desimal.toString(2);
+              langkahTarget = `Konversi dari desimal ke biner:<br>${desimal}<sub>10</sub> = ${hasilKonversi}<sub>2</sub>`;
+              break;
+            case "oct":
+              hasilKonversi = desimal.toString(8);
+              langkahTarget = `Konversi dari desimal ke oktal:<br>${desimal}<sub>10</sub> = ${hasilKonversi}<sub>8</sub>`;
+              break;
+            case "dec":
+              hasilKonversi = desimal.toString(10);
+              langkahTarget = `Sudah dalam bentuk desimal.`;
+              break;
+            case "hex":
+              hasilKonversi = desimal.toString(16).toUpperCase();
+              langkahTarget = `Konversi dari desimal ke heksadesimal:<br>${desimal}<sub>10</sub> = ${hasilKonversi}<sub>16</sub>`;
+              break;
+          }
+          hasil = `Hasil: ${hasilKonversi}<sub>${
+            target === "bin"
+              ? 2
+              : target === "oct"
+              ? 8
+              : target === "dec"
+              ? 10
+              : 16
+          }</sub>`;
+          langkah += langkahTarget;
+        }
+
+        hasilDiv.innerHTML = hasil;
+        langkahDiv.innerHTML = langkah;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <svg class="galaxy" viewBox="0 0 512 512">
+      <defs>
+        <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff8" />
+          <stop offset="30%" stop-color="#91c3fdcc" />
+          <stop offset="100%" stop-color="#2d345c00" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="256" cy="256" rx="180" ry="64" fill="url(#g1)" />
+      <ellipse
+        cx="256"
+        cy="256"
+        rx="100"
+        ry="24"
+        fill="url(#g1)"
+        transform="rotate(30 256 256)"
+      />
+      <ellipse
+        cx="256"
+        cy="256"
+        rx="130"
+        ry="34"
+        fill="url(#g1)"
+        transform="rotate(-18 256 256)"
+      />
+    </svg>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="konversi.html" class="active">Konversi</a>
+      <a href="aritmatika.html">Aritmatika</a>
+    </nav>
+    <div class="card">
+      <h2>Konversi Bilangan</h2>
+      <div style="margin-bottom: 1.7em">
+        <div style="margin-bottom: 1em">
+          <label for="inputBil" style="display: block; margin-bottom: 0.4em"
+            >Input Bilangan</label
+          >
+          <input
+            id="inputBil"
+            type="text"
+            placeholder="Contoh: -25, 1101, 1A"
+            style="width: 100%"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 1em">
+          <div style="flex: 1">
+            <label>Basis Asal</label>
+            <select id="basisAsal" style="width: 100%">
+              <option value="dec">Desimal</option>
+              <option value="bin">Biner</option>
+              <option value="oct">Oktal</option>
+              <option value="hex">Heksadesimal</option>
+            </select>
+          </div>
+          <div style="flex: 1">
+            <label>Basis Target</label>
+            <select id="basisTarget" style="width: 100%">
+              <option value="bin">Biner</option>
+              <option value="oct">Oktal</option>
+              <option value="dec">Desimal</option>
+              <option value="hex">Heksadesimal</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="konversi()" style="width: 100%; margin-top: 1em">
+          Konversi
+        </button>
+      </div>
+      <div>
+        <div id="hasil"></div>
+        <button onclick="copyResult('hasil')" style="margin-top: 0.5em">
+          Copy Hasil
+        </button>
+        <div id="langkah"></div>
+      </div>
+    </div>
+  </body>
+</html>

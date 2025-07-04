@@ -1,0 +1,135 @@
+/* Background Space */
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  color: #f5f6fa;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated Stars */
+.stars, .stars2, .stars3 {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100vw; height: 100vh;
+}
+.stars { background: transparent url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars.png') repeat top center; animation: moveStars 200s linear infinite; }
+.stars2 { background: transparent url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars2.png') repeat top center; animation: moveStars2 300s linear infinite; }
+.stars3 { background: transparent url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars3.png') repeat top center; animation: moveStars3 500s linear infinite; }
+@keyframes moveStars { from {background-position: 0 0;} to {background-position: 10000px 5000px;} }
+@keyframes moveStars2 { from {background-position: 0 0;} to {background-position: 20000px 10000px;} }
+@keyframes moveStars3 { from {background-position: 0 0;} to {background-position: 40000px 20000px;} }
+
+/* Galaxy swirl SVG (bottom right) */
+.galaxy {
+  position: fixed;
+  right: -140px;
+  bottom: -80px;
+  width: 400px;
+  height: 400px;
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  filter: blur(0.8px) brightness(1.2) drop-shadow(0 0 60px #e0e6f9);
+  transition: opacity 1s;
+}
+
+/* Card & Form */
+.card {
+  background: rgba(28, 31, 61, 0.93);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px 0 rgba(15, 26, 52, 0.5);
+  padding: 2.2rem 2.1rem;
+  max-width: 450px;
+  margin: 40px auto;
+  z-index: 1;
+  position: relative;
+}
+
+.card h1, .card h2 {
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.8em;
+  color: #72baff;
+  text-shadow: 0 2px 20px #1b3a71;
+}
+.card h2 { color: #b8e2f2; }
+
+input, select, button {
+  border-radius: 12px;
+  padding: 0.6em 1em;
+  border: none;
+  margin-top: 0.5em;
+  font-size: 1em;
+  background: #1c2236;
+  color: #f5f6fa;
+  transition: box-shadow 0.3s;
+  outline: none;
+}
+input:focus, select:focus {
+  box-shadow: 0 0 0 2px #72baff44;
+  background: #232a47;
+}
+button {
+  cursor: pointer;
+  background: linear-gradient(90deg, #387fff, #63e2ff 85%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 16px #387fff45;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: linear-gradient(90deg, #2860c7, #3ed0d9 80%);
+  transform: translateY(-2px) scale(1.04);
+}
+
+nav {
+  background: rgba(18, 22, 46, 0.82);
+  border-bottom: 1px solid #293058;
+  box-shadow: 0 2px 8px #10153822;
+  z-index: 10;
+  position: relative;
+}
+nav a {
+  color: #98b9ff;
+  padding: 0.8em 1.4em;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 18px;
+  margin: 0 0.3em;
+  transition: background 0.2s, color 0.2s;
+}
+nav a:hover, nav a.active {
+  background: #20386e;
+  color: #fff;
+}
+
+#hasil, #langkah {
+  margin-top: 1em;
+}
+#hasil {
+  font-size: 1.18em;
+  font-weight: bold;
+  color: #a7fffd;
+  text-shadow: 0 1px 10px #19c5ff33;
+}
+#langkah {
+  font-size: 0.98em;
+  color: #d2e6ff;
+  background: rgba(23,32,48,0.6);
+  padding: 1.2em 1em;
+  border-radius: 12px;
+  margin-top: 0.7em;
+  box-shadow: 0 1px 8px #1b2e5088;
+}
+
+footer {
+  margin-top: 2.5em;
+  color: #4e6595;
+  font-size: 0.98em;
+  text-align: center;
+  opacity: 0.7;
+}

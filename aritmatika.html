@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Aritmatika Bilangan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background & Galaxy -->
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+  <svg class="galaxy" viewBox="0 0 512 512">
+    <defs>
+      <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fff8"/>
+        <stop offset="30%" stop-color="#91c3fdcc"/>
+        <stop offset="100%" stop-color="#2d345c00"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="256" cy="256" rx="180" ry="64" fill="url(#g1)" />
+    <ellipse cx="256" cy="256" rx="100" ry="24" fill="url(#g1)" transform="rotate(30 256 256)" />
+    <ellipse cx="256" cy="256" rx="130" ry="34" fill="url(#g1)" transform="rotate(-18 256 256)" />
+  </svg>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="konversi.html">Konversi</a>
+    <a href="aritmatika.html" class="active">Aritmatika</a>
+  </nav>
+
+  <div class="card">
+    <h2>Kalkulator Aritmatika Bilangan</h2>
+    <div>
+      <input type="text" id="bil1" placeholder="Bilangan Pertama">
+      <select id="basis1">
+        <option value="bin">Biner (2)</option>
+        <option value="oct">Oktal (8)</option>
+        <option value="dec" selected>Desimal (10)</option>
+        <option value="hex">Heksadesimal (16)</option>
+      </select>
+    </div>
+    <div>
+      <input type="text" id="bil2" placeholder="Bilangan Kedua">
+      <select id="basis2">
+        <option value="bin">Biner (2)</option>
+        <option value="oct">Oktal (8)</option>
+        <option value="dec" selected>Desimal (10)</option>
+        <option value="hex">Heksadesimal (16)</option>
+      </select>
+    </div>
+    <div>
+      <select id="operator">
+        <option value="add">Tambah (+)</option>
+        <option value="sub">Kurang (-)</option>
+        <option value="mul">Kali (×)</option>
+        <option value="div">Bagi (÷)</option>
+      </select>
+      <select id="basisHasil">
+        <option value="bin">Biner (2)</option>
+        <option value="oct">Oktal (8)</option>
+        <option value="dec" selected>Desimal (10)</option>
+        <option value="hex">Heksadesimal (16)</option>
+      </select>
+    </div>
+    <button onclick="operasiAritmatika()">Hitung</button>
+    <button onclick="copyResult('hasil')">Salin Hasil</button>
+
+    <div class="output">
+      <h3 id="hasil">Hasil: -</h3>
+      <p id="langkah"></p>
+    </div>
+  </div>
+
+  <script>
+    function copyResult(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text);
+      alert("Hasil sudah disalin!");
+    }
+
+    function parseInput(nilai, basis) {
+      switch (basis) {
+        case "bin": return parseInt(nilai, 2);
+        case "oct": return parseInt(nilai, 8);
+        case "dec": return parseInt(nilai, 10);
+        case "hex": return parseInt(nilai, 16);
+      }
+      return NaN;
+    }
+
+    function formatOutput(nilai, basis) {
+      if (isNaN(nilai)) return "NaN";
+      switch (basis) {
+        case "bin": return nilai.toString(2);
+        case "oct": return nilai.toString(8);
+        case "dec": return nilai.toString(10);
+        case "hex": return nilai.toString(16).toUpperCase();
+      }
+      return "";
+    }
+
+    function operasiAritmatika() {
+      const v1 = document.getElementById('bil1').value.trim();
+      const basis1 = document.getElementById('basis1').value;
+      const v2 = document.getElementById('bil2').value.trim();
+      const basis2 = document.getElementById('basis2').value;
+      const operasi = document.getElementById('operator').value;
+      const basisHasil = document.getElementById('basisHasil').value;
+      const langkahDiv = document.getElementById('langkah');
+      const hasilDiv = document.getElementById('hasil');
+
+      if (v1 === "" || v2 === "") {
+        hasilDiv.innerText = "Masukkan kedua bilangan!";
+        langkahDiv.innerHTML = "";
+        return;
+      }
+
+      let n1 = parseInput(v1, basis1);
+      let n2 = parseInput(v2, basis2);
+
+      if (isNaN(n1) || isNaN(n2)) {
+        hasilDiv.innerText = "Input tidak valid!";
+        langkahDiv.innerHTML = "";
+        return;
+      }
+
+      let result;
+      let simbol;
+      switch (operasi) {
+        case "add": result = n1 + n2; simbol = "+"; break;
+        case "sub": result = n1 - n2; simbol = "-"; break;
+        case "mul": result = n1 * n2; simbol = "×"; break;
+        case "div":
+          if (n2 === 0) {
+            hasilDiv.innerText = "Tidak bisa dibagi 0!";
+            langkahDiv.innerHTML = "";
+            return;
+          }
+          result = Math.floor(n1 / n2); simbol = "÷"; break;
+      }
+
+      const output = formatOutput(result, basisHasil);
+      const basisSub = basisHasil === 'bin' ? 2 : basisHasil === 'oct' ? 8 : basisHasil === 'dec' ? 10 : 16;
+
+      hasilDiv.innerHTML = `Hasil: ${output}<sub>${basisSub}</sub>`;
+      langkahDiv.innerHTML = `
+        <b>Langkah Aritmatika:</b><br>
+        1. Konversi bilangan pertama: ${v1}<sub>${basisSub}</sub> = ${n1}<sub>10</sub><br>
+        2. Konversi bilangan kedua: ${v2}<sub>${basisSub}</sub> = ${n2}<sub>10</sub><br>
+        3. Operasi: ${n1} ${simbol} ${n2} = ${result}<br>
+        4. Konversi hasil ke ${basisHasil}: ${result}<sub>10</sub> = ${output}<sub>${basisSub}</sub>
+      `;
+    }
+  </script>
+</body>
+</html>
